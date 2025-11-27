@@ -5,29 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ritual Quiz Challenge</title>
 <style>
-  body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; margin:0; display:flex; justify-content:center; align-items:center; min-height:100vh; }
+  body { font-family:'Segoe UI', sans-serif; background:#F7F3FF; margin:0; display:flex; justify-content:center; align-items:center; min-height:100vh; }
   .container { background:white; padding:30px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.1); width:100%; max-width:600px; text-align:center; position:relative; overflow:hidden; }
   .fade-in { opacity:0; animation:fadeIn 2s forwards; }
   @keyframes fadeIn { to {opacity:1;} }
-  .question { font-size:1.2em; margin-bottom:20px; }
-  .options button { display:block; margin:10px auto; padding:12px 25px; border:none; border-radius:8px; background:#4a90e2; color:white; font-size:1em; cursor:pointer; transition:0.2s; }
-  .options button:hover { background:#357ABD; }
-  .result { font-size:1.2em; margin-top:20px; }
-  .next-btn { display:none; margin-top:20px; padding:10px 20px; background:#28a745; color:white; border:none; border-radius:8px; cursor:pointer; font-size:1em; }
-  .mascot { font-size:4em; margin-top:20px; }
-  .intro { font-size:1.5em; margin-bottom:20px; }
+  .question { font-size:1.2em; margin-bottom:20px; color:#4B0082; }
+  .options button { display:block; margin:10px auto; padding:12px 25px; border:none; border-radius:8px; background:#8A2BE2; color:white; font-size:1em; cursor:pointer; transition:0.2s; }
+  .options button:hover { background:#6A0DAD; }
+  .result { font-size:1.2em; margin-top:20px; color:#4B0082; animation:pop 0.5s ease forwards; }
+  .next-btn { display:none; margin-top:20px; padding:12px 25px; background:#4B0082; color:white; border:none; border-radius:8px; cursor:pointer; font-size:1em; }
+  .next-btn:hover { background:#6A0DAD; }
+  .mascot { font-size:4em; margin-top:20px; opacity:0; }
+  .intro { font-size:1.5em; margin-bottom:20px; color:#4B0082; }
   .footer { margin-top:30px; font-size:0.9em; }
-  .footer a { color:#4a90e2; text-decoration:none; }
+  .footer a { color:#8A2BE2; text-decoration:none; }
   .footer a:hover { text-decoration:underline; }
+  #startBtn { display:block; margin:100px auto 0 auto; }
+  @keyframes pop { 0%{transform:scale(0);} 70%{transform:scale(1.2);} 100%{transform:scale(1);} }
 </style>
 </head>
 <body>
 
 <div class="container">
+
   <!-- Intro Page -->
   <div id="introPage" class="fade-in">
-    <div class="intro">How Ritual-aligned are you?<br>Let's find out!</div>
-    <button id="startBtn" class="next-btn" style="display:block;">Click to Begin Quiz</button>
+    <div class="intro">How Ritual‑aligned are you?<br>Let's find out!</div>
+    <button id="startBtn" class="next-btn">Click to Begin Quiz</button>
     <div class="footer">Built by <a href="https://x.com/THE_REAL_BIG4L?t=PYvu1HEe6mb-MVMpn7_3HQ&s=09" target="_blank">@THE_REAL_BIG4L</a></div>
   </div>
 
@@ -43,145 +47,78 @@
   <!-- Final Page -->
   <div id="finalPage" style="display:none;">
     <div class="result" id="finalScore"></div>
-    <div class="mascot" id="mascot"></div>
-    <button id="restartBtn" class="next-btn">Restart Quiz</button>
+    <div class="mascot" id="mascot">SIGGY</div>
+    <button id="restartBtn" class="next-btn">Retake Quiz</button>
     <div class="footer">Built by <a href="https://x.com/THE_REAL_BIG4L?t=PYvu1HEe6mb-MVMpn7_3HQ&s=09" target="_blank">@THE_REAL_BIG4L</a></div>
   </div>
+
 </div>
 
 <script>
-  // ---------------- 50 QUESTION BANK ----------------
-  const fullQuestionBank = [
-    // EASY (15)
-    {id:"q1", difficulty:"easy", question:"What is the core mission of Ritual blockchain?", options:["Scalable payments","Enrich what users can do on-chain","Private messaging","Gaming"], answer:"Enrich what users can do on-chain"},
-    {id:"q2", difficulty:"easy", question:"Ritual was born at the intersection of which two fields?", options:["Gaming & VR","Crypto & AI","DeFi & NFTs","Storage & Networking"], answer:"Crypto & AI"},
-    {id:"q3", difficulty:"easy", question:"Which feature lets smart contracts schedule recurring calls?", options:["Guardians","Scheduled Transactions","Resonance","Node Specialization"], answer:"Scheduled Transactions"},
-    {id:"q4", difficulty:"easy", question:"What does Modular Storage allow?", options:["Only store on-chain","Use Web2 and Web3 backends","Encrypt all data","Force AWS usage"], answer:"Use Web2 and Web3 backends"},
-    {id:"q5", difficulty:"easy", question:"Which goal is NOT part of Ritual's architecture?", options:["Enable expressive on-chain compute","Support large data","Force all computation on-chain","Support heterogeneous workloads"], answer:"Force all computation on-chain"},
-    {id:"q6", difficulty:"easy", question:"Ritual is designed for which type of users?", options:["Only experts","Both new and experienced users","Only DeFi traders","Only AI developers"], answer:"Both new and experienced users"},
-    {id:"q7", difficulty:"easy", question:"Ritual combines blockchain with…?", options:["Cloud gaming","AI models","Social media","IoT"], answer:"AI models"},
-    {id:"q8", difficulty:"easy", question:"Ritual's smart contracts are optimized for…?", options:["Speed","Cost only","AI computation","Mining"], answer:"AI computation"},
-    {id:"q9", difficulty:"easy", question:"Which backend example does Modular Storage support?", options:["AWS only","HuggingFace Hub","Only local storage","Google Drive"], answer:"HuggingFace Hub"},
-    {id:"q10", difficulty:"easy", question:"Ritual supports what kind of compute?", options:["Only token transfers","Heterogeneous compute","Only storage","Only AI inference"], answer:"Heterogeneous compute"},
-    {id:"q11", difficulty:"easy", question:"Which feature provides data flexibility?", options:["Node Specialization","Modular Storage","Resonance","Symphony"], answer:"Modular Storage"},
-    {id:"q12", difficulty:"easy", question:"What is Ritual's main blockchain focus?", options:["Gaming","AI & compute","Social media","Payments"], answer:"AI & compute"},
-    {id:"q13", difficulty:"easy", question:"Ritual’s Modular Storage can store large objects like…?", options:["Images","AI models","Text only","NFT metadata"], answer:"AI models"},
-    {id:"q14", difficulty:"easy", question:"Which of these is a goal of Ritual?", options:["Force all computation on-chain","Support heterogeneous workloads","Limit AI tasks","Centralized storage"], answer:"Support heterogeneous workloads"},
-    {id:"q15", difficulty:"easy", question:"Ritual is designed to work with…?", options:["Only Web3","Web2 and Web3","Only local storage","Only AWS"], answer:"Web2 and Web3"},
+// -------- 60‑QUESTION BANK based on Ritual docs --------
+const fullQuestionBank = [
+  // EASY (20)
+  {id:"q1", difficulty:"easy", question:"What is the mission of Ritual blockchain?", options:["Scalable payments","Enrich what users can do on‑chain","Private messaging","Social media platform"], answer:"Enrich what users can do on‑chain"},
+  {id:"q2", difficulty:"easy", question:"Ritual combines crypto with which other technology focus?", options:["Cloud gaming","Social networks","Artificial Intelligence","Real‑estate"], answer:"Artificial Intelligence"},
+  {id:"q3", difficulty:"easy", question:"Which term describes Ritual allowing diverse compute types (AI, ZK, TEE) on‑chain?", options:["Homogeneous compute","Heterogeneous compute","Basic compute","Legacy compute"], answer:"Heterogeneous compute"},
+  {id:"q4", difficulty:"easy", question:"True or False: Ritual supports storage‑agnostic data storage (Web2 or Web3) through Modular Storage.", options:["True","False","Only Web3","Only Web2"], answer:"True"},
+  {id:"q5", difficulty:"easy", question:"Which feature in Ritual allows running scheduled or recurring smart contract calls without external keepers?", options:["Resonance","Symphony","Scheduled Transactions","Modular Storage"], answer:"Scheduled Transactions"},
+  {id:"q6", difficulty:"easy", question:"Does Ritual aim to support novel behaviors beyond standard blockchain transactions?", options:["Yes","No","Only DeFi","Only NFTs"], answer:"Yes"},
+  {id:"q7", difficulty:"easy", question:"Ritual’s blockchain is optimized to support which kind of compute-intensive workloads?", options:["Only token transfers","AI inference, ZK proofs, TEEs, cross‑chain state","Only storage","Only NFTs"], answer:"AI inference, ZK proofs, TEEs, cross‑chain state"},
+  {id:"q8", difficulty:"easy", question:"Which mechanism in Ritual handles flexible execution pricing and matching compute jobs to nodes?", options:["Symphony","Resonance","EVM++","Modular Storage"], answer:"Resonance"},
+  {id:"q9", difficulty:"easy", question:"True or False: Ritual uses a new consensus model to support heavy and varied compute workloads.", options:["True","False","Only PoW","Only Classic EVM"], answer:"True"},
+  {id:"q10", difficulty:"easy", question:"Ritual’s architectural goal is to be a backend for other blockchains needing heavy compute. (Yes/No)", options:["Yes","No","Maybe","Only for Ethereum"], answer:"Yes"},
+  {id:"q11", difficulty:"easy", question:"Which storage backends does Ritual’s Modular Storage potentially support?", options:["Only Web3","Only Web2","Web2 and Web3","Local only"], answer:"Web2 and Web3"},
+  {id:"q12", difficulty:"easy", question:"Is Ritual EVM‑compatible (via EVM++) to facilitate developer adoption?", options:["Yes","No","Only partly","Not sure"], answer:"Yes"},
+  {id:"q13", difficulty:"easy", question:"Which feature lets users execute complex compute (AI/ZK) without every node re‑executing it?", options:["Resonance","Node Specialization & Symphony","Modular Storage","Scheduled Transactions"], answer:"Node Specialization & Symphony"},
+  {id:"q14", difficulty:"easy", question:"Can developers on Ritual integrate AI models natively into smart contracts (inference, fine‑tuning, etc)?", options:["Yes","No","Only storage","Only separate off‑chain"], answer:"Yes"},
+  {id:"q15", difficulty:"easy", question:"Does Ritual aim to make on‑chain AI open, verifiable, and censorship‑resistant?", options:["Yes","No","Only private","Only off‑chain"], answer:"Yes"},
+  {id:"q16", difficulty:"easy", question:"Which mechanism allows users to express cost or speed preference when submitting compute‑heavy transactions?", options:["GasFee","Resonance","EVM","StorageFee"], answer:"Resonance"},
+  {id:"q17", difficulty:"easy", question:"Does Ritual support expressive compute beyond standard smart‑contract logic?", options:["Yes","No","Only token transfers","Only NFTs"], answer:"Yes"},
+  {id:"q18", difficulty:"easy", question:"True or False: Modular Storage discards the need for on‑chain storage for large data (like AI model weights).", options:["True","False","Only sometimes","Not specified"], answer:"True"},
+  {id:"q19", difficulty:"easy", question:"Ritual aims to attract which kind of users/developers beyond traditional blockchain users?", options:["Only traders","AI & infrastructure builders","Only gamers","Only artists"], answer:"AI & infrastructure builders"},
+  {id:"q20", difficulty:"easy", question:"Which technology domains does Ritual intend to support under its heterogeneous compute design?", options:["Just AI","AI, ZK proofs, TEEs, cross‑chain operations","Only ZK","Only storage"], answer:"AI, ZK proofs, TEEs, cross‑chain operations"},
 
-    // MID (20)
-    {id:"q16", difficulty:"mid", question:"What is EVM++?", options:["New token","Extensions to EVM for advanced features","A wallet","Consensus protocol"], answer:"Extensions to EVM for advanced features"},
-    {id:"q17", difficulty:"mid", question:"Which feature is NOT in EVM++?", options:["Native scheduling","Account abstraction","Heterogeneous compute precompiles","Automatic token burning"], answer:"Automatic token burning"},
-    {id:"q18", difficulty:"mid", question:"What is the fee mechanism matching transactions to nodes?", options:["GasFee","Resonance","EIP-1559","GasMarket"], answer:"Resonance"},
-    {id:"q19", difficulty:"mid", question:"Node Specialization solves?", options:["Uniform performance","Allow specialized nodes","Remove validators","Require heavy hardware"], answer:"Allow specialized nodes"},
-    {id:"q20", difficulty:"mid", question:"Which storage backends does Modular Storage support?", options:["Web3 only","Web2 only","Web2 via HuggingFace, Web3 via Arweave","Local only"], answer:"Web2 via HuggingFace, Web3 via Arweave"},
-    {id:"q21", difficulty:"mid", question:"Which consensus protocol for heterogeneous compute?", options:["PoW++","Symphony","BeaconChain","ShardingX"], answer:"Symphony"},
-    {id:"q22", difficulty:"mid", question:"Why is replicated execution inefficient for heterogeneous workloads?", options:["Too fast","All nodes re-execute expensive compute","Not deterministic","Memory usage"], answer:"All nodes re-execute expensive compute"},
-    {id:"q23", difficulty:"mid", question:"Can developers use familiar Ethereum tooling?", options:["Yes via EVM++","No","Only for storage","Only for wallets"], answer:"Yes via EVM++"},
-    {id:"q24", difficulty:"mid", question:"Why choose specialized node over generic?", options:["Support heavy compute","Generic banned","More tokens automatically","Faster token transfers"], answer:"Support heavy compute"},
-    {id:"q25", difficulty:"mid", question:"What does Scheduled Transactions feature allow?", options:["Recurring smart contract calls","Only single execution","AI inference","Node staking"], answer:"Recurring smart contract calls"},
-    {id:"q26", difficulty:"mid", question:"What is the purpose of Resonance?", options:["Match transactions to capable nodes","Store AI models","Mining only","Wallet management"], answer:"Match transactions to capable nodes"},
-    {id:"q27", difficulty:"mid", question:"Which feature provides flexible compute execution?", options:["Execution Sidecars","Symphony","Resonance","Node Specialization"], answer:"Execution Sidecars"},
-    {id:"q28", difficulty:"mid", question:"Which part of Ritual ensures transaction efficiency?", options:["Symphony","Modular Storage","Wallets","Nodes"], answer:"Symphony"},
-    {id:"q29", difficulty:"mid", question:"What does Modular Storage prevent?", options:["Forced on-chain storage","Compute execution","Mining","Wallet access"], answer:"Forced on-chain storage"},
-    {id:"q30", difficulty:"mid", question:"Ritual supports heterogeneous compute for?", options:["Token transfer only","AI, ZK, TEE, cross-chain state","Storage only","Queries only"], answer:"AI, ZK, TEE, cross-chain state"},
-    {id:"q31", difficulty:"mid", question:"Resonance allows user to specify what instead of gas?", options:["Flat fee","Valuation (max willingness to pay)","No fee","Percentage block reward"], answer:"Valuation (max willingness to pay)"},
-    {id:"q32", difficulty:"mid", question:"Which feature schedules smart contract calls without external keepers?", options:["Execution Sidecars","Native Scheduling in EVM++","Symphony","Resonance"], answer:"Native Scheduling in EVM++"},
-    {id:"q33", difficulty:"mid", question:"Why does Ritual support multiple proof systems?", options:["Supports multiple verification/TEE/ZK","One proof only","Ignores verification","Only TEE"], answer:"Supports multiple verification/TEE/ZK"},
-    {id:"q34", difficulty:"mid", question:"What does Modular Storage help with for AI models?", options:["Flexibility, large data","Faster mining","Only storage","Gas savings"], answer:"Flexibility, large data"},
-    {id:"q35", difficulty:"mid", question:"What is the role of Execution Sidecars?", options:["Implement heterogeneous compute precompiles","Store wallets","Token transfer only","Mining"], answer:"Implement heterogeneous compute precompiles"},
+  // MID (25)
+  {id:"q21", difficulty:"mid", question:"What is the name of Ritual’s fee‑market mechanism for heterogeneous compute?", options:["GasMarket","Resonance","FeePlus","ComputeFee"], answer:"Resonance"},
+  {id:"q22", difficulty:"mid", question:"What does “Node Specialization” in Ritual refer to?", options:["All nodes identical","Nodes optimized for specific workload types","Validator-only nodes","Storage-only nodes"], answer:"Nodes optimized for specific workload types"},
+  {id:"q23", difficulty:"mid", question:"Which consensus protocol does Ritual use to support heterogeneous compute efficiently?", options:["Proof‑of‑Work","PoS","Symphony","Classic EVM consensus"], answer:"Symphony"},
+  {id:"q24", difficulty:"mid", question:"What is the core benefit of the “Execute‑Once, Verify‑Many” model in Ritual’s Symphony consensus?", options:["Faster token transfers","Avoid full re‑execution on all nodes","Only storage optimization","Only AI inference"], answer:"Avoid full re‑execution on all nodes"},
+  {id:"q25", difficulty:"mid", question:"Which types of compute workloads does Ritual support beyond standard smart‑contract logic?", options:["Only storage","AI inference, ZK proofs, TEE execution, cross‑chain state","Only token transfers","Only NFTs"], answer:"AI inference, ZK proofs, TEE execution, cross‑chain state"},
+  {id:"q26", difficulty:"mid", question:"What does Ritual’s Modular Storage allow developers to do?", options:["Force on‑chain storage","Choose Web2 or Web3 storage backend","Use only local storage","Use centralized servers only"], answer:"Choose Web2 or Web3 storage backend"},
+  {id:"q27", difficulty:"mid", question:"True or False: With Ritual, heavy compute tasks like AI inference may be executed off‑chain by specialized nodes, then verified on‑chain.", options:["True","False","Only on‑chain","Not supported"], answer:"True"},
+  {id:"q28", difficulty:"mid", question:"Which feature lets smart contracts schedule recurring or conditional calls without external keepers in Ritual?", options:["Resonance","Scheduled Transactions","Modular Storage","EVM"], answer:"Scheduled Transactions"},
+  {id:"q29", difficulty:"mid", question:"Does Ritual support account abstraction and EVM enhancements to improve developer experience?", options:["Yes","No","Only partly","Not clear"], answer:"Yes"},
+  {id:"q30", difficulty:"mid", question:"Which mechanism ensures that compute‑heavy workloads get matched to capable nodes based on cost and performance preferences?", options:["GasFee","Resonance","Fixed Fee","Random assignment"], answer:"Resonance"},
+  {id:"q31", difficulty:"mid", question:"What does Ritual seek to eliminate by using specialized compute + fee‑market + proof‑based verification rather than replicated execution?", options:["Node centralization","Gas fees","Redundant computation","Storage use"], answer:"Redundant computation"},
+  {id:"q32", difficulty:"mid", question:"Why is traditional replicated execution inefficient for heterogeneous workloads according to Ritual?", options:["Too slow","All nodes re‑execute even heavy compute, wasting resources","Not secure","No benefits"], answer:"All nodes re‑execute even heavy compute, wasting resources"},
+  {id:"q33", difficulty:"mid", question:"Can developers use familiar Ethereum tooling when building on Ritual (thanks to EVM++)?", options:["Yes","No","Only for storage","Only for token transfer"], answer:"Yes"},
+  {id:"q34", difficulty:"mid", question:"Does Ritual aim to become backend infrastructure for other chains needing heavy compute, like rollups or prover networks?", options:["Yes","No","Only internal","Only AI apps"], answer:"Yes"},
+  {id:"q35", difficulty:"mid", question:"Which of these is NOT a design goal of Ritual?", options:["Support for heterogeneous compute","Flexibility in compute & storage","Require every node to re‑execute everything","Allow Web2 and Web3 storage"], answer:"Require every node to re‑execute everything"},
+  {id:"q36", difficulty:"mid", question:"What types of compute‑backends are supported by Ritual for data & model storage and retrieval?", options:["Only Web3","Only Web2","Web2 or Web3","None"], answer:"Web2 or Web3"},
+  {id:"q37", difficulty:"mid", question:"True or False: Ritual’s design allows other blockchains to outsource compute‑heavy tasks to Ritual’s network.", options:["True","False","Only certain tasks","Not possible"], answer:"True"},
+  {id:"q38", difficulty:"mid", question:"Which protocol innovation allows AI, ZK and other heavy workloads to coexist on Ritual without degrading performance for simple transactions?", options:["Classic EVM","Symphony + Resonance + Sidecars","PoW","Only Storage"], answer:"Symphony + Resonance + Sidecars"},
+  {id:"q39", difficulty:"mid", question:"What does it mean for Ritual to be able to support ‘any type of compute, current or future’ on‑chain?", options:["Only token logic","AI, ZK, TEEs, future types as well","Only storage","Only fixed compute types"], answer:"AI, ZK, TEEs, future types as well"},
+  {id:"q40", difficulty:"mid", question:"Which feature provides proof‑system‑agnostic verification for heavy compute tasks in Ritual?", options:["Fixed protocol","Symphony consensus with proof‑system agnostic support","No verification","Only central authority"], answer:"Symphony consensus with proof‑system agnostic support"},
+  {id:"q41", difficulty:"mid", question:"Why does Ritual consider traditional fee models inadequate for heterogeneous compute?", options:["Too complicated","They price all compute equally","They don’t support AI","They are slow"], answer:"They price all compute equally"},
+  {id:"q42", difficulty:"mid", question:"What does the term “Expressive Blockchain” refer to in the context of Ritual?", options:["Only token transfers","A blockchain capable of native AI, ZK, TEE, and arbitrary compute","Only DeFi","Only storage"], answer:"A blockchain capable of native AI, ZK, TEE, and arbitrary compute"},
+  {id:"q43", difficulty:"mid", question:"Which feature ensures flexibility for developers regarding compute type, storage backend and execution preferences in Ritual?", options:["Fixed architecture","Node Specialization + Modular Storage + Resonance + EVM++","Only storage","Only token transfer"], answer:"Node Specialization + Modular Storage + Resonance + EVM++"},
 
-    // TECHNICAL (15)
-    {id:"q36", difficulty:"technical", question:"Symphony execution principle?", options:["Replicate everywhere","Execute-once, verify-many","Delay transactions","Limit to opcodes"], answer:"Execute-once, verify-many"},
-    {id:"q37", difficulty:"technical", question:"Resonance nodes must provide?", options:["Fixed fee","Cost function for execution","Nothing","Only staking"], answer:"Cost function for execution"},
-    {id:"q38", difficulty:"technical", question:"Enshrined On-Chain AI ensures?", options:["Provenance, authenticity, IP primitives","Private server storage","Developer use only","Non-blockchain AI"], answer:"Provenance, authenticity, IP primitives"},
-    {id:"q39", difficulty:"technical", question:"Why Web2+Web3 storage?", options:["Developer flexibility, large AI data","Backward compatible","Web3 unreliable","Avoid blockchain"], answer:"Developer flexibility, large AI data"},
-    {id:"q40", difficulty:"technical", question:"What happens to user 'valuation' before transaction-node match?", options:["Public immediately","Encrypted until matching","Ignored","Burned"], answer:"Encrypted until matching"},
-    {id:"q41", difficulty:"technical", question:"Proof-system agnostic means?", options:["Only one proof system","Supports multiple verification systems","No proofs","Ignores verification"], answer:"Supports multiple verification systems"},
-    {id:"q42", difficulty:"technical", question:"Which compute workloads are supported beyond standard smart contract logic?", options:["AI, ZK, TEE, cross-chain","Token transfer only","Storage only","Price queries only"], answer:"AI, ZK, TEE, cross-chain"},
-    {id:"q43", difficulty:"technical", question:"Why specialized node improves cost/performance?", options:["Optimizes heavy compute tasks","Generic nodes banned","More tokens automatically","Faster token transfers"], answer:"Optimizes heavy compute tasks"},
-    {id:"q44", difficulty:"technical", question:"Which fee option lets users express max willingness to pay?", options:["Flat fee","Valuation","No fee","Percentage block reward"], answer:"Valuation"},
-    {id:"q45", difficulty:"technical", question:"Execution sidecars implement what?", options:["Heterogeneous precompiles","Wallets","Token transfer only","Mining"], answer:"Heterogeneous precompiles"},
-    {id:"q46", difficulty:"technical", question:"What ensures heterogeneous execution integrity?", options:["TEE, ZK, hybrid proofs","Only PoW","Nothing special","Central authority"], answer:"TEE, ZK, hybrid proofs"},
-    {id:"q47", difficulty:"technical", question:"What is the advantage of Modular Storage for AI models?", options:["Flexible storage backend","Faster mining","Cheap gas","Unlimited on-chain storage"], answer:"Flexible storage backend"},
-    {id:"q48", difficulty:"technical", question:"Which component allows scheduling without external keepers?", options:["Native scheduling in EVM++","Symphony","Resonance","Execution Sidecars"], answer:"Native scheduling in EVM++"},
-    {id:"q49", difficulty:"technical", question:"What is the function of Resonance in heterogeneous compute?", options:["Match nodes to tasks efficiently","Store AI models","Wallet only","Mining only"], answer:"Match nodes to tasks efficiently"},
-    {id:"q50", difficulty:"technical", question:"What is Node Specialization?", options:["Nodes specialized for workloads","All nodes generic","Mining only","Storage only"], answer:"Nodes specialized for workloads"}
-  ];
-
-  function shuffleArray(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
-
-  // Draw round of 10 questions (3 technical, 4 mid, 3 easy)
-  function drawRound(bank){
-    const byDiff = {easy:[], mid:[], technical:[]};
-    bank.forEach(q=>{byDiff[q.difficulty].push(q);});
-    shuffleArray(byDiff.easy); shuffleArray(byDiff.mid); shuffleArray(byDiff.technical);
-    const sel = [];
-    sel.push(...byDiff.technical.slice(0,3)); // 3 technical
-    sel.push(...byDiff.mid.slice(0,4));       // 4 mid
-    sel.push(...byDiff.easy.slice(0,3));      // 3 easy
-    shuffleArray(sel);
-    return sel;
-  }
-
-  let roundQuestions = drawRound(fullQuestionBank);
-  let current = 0; let score = 0;
-
-  const introPage = document.getElementById('introPage');
-  const startBtn = document.getElementById('startBtn');
-  const quizPage = document.getElementById('quizPage');
-  const questionEl = document.getElementById('question');
-  const optionsEl = document.getElementById('options');
-  const feedbackEl = document.getElementById('feedback');
-  const nextBtn = document.getElementById('nextBtn');
-  const finalPage = document.getElementById('finalPage');
-  const finalScoreEl = document.getElementById('finalScore');
-  const mascotEl = document.getElementById('mascot');
-  const restartBtn = document.getElementById('restartBtn');
-
-  startBtn.onclick = () => { introPage.style.display='none'; quizPage.style.display='block'; loadQuestion(); };
-
-  function loadQuestion(){
-    const q = roundQuestions[current];
-    questionEl.textContent = q.question;
-    optionsEl.innerHTML='';
-    feedbackEl.textContent='';
-    nextBtn.style.display='none';
-    shuffleArray(q.options);
-    q.options.forEach(opt=>{
-      const btn=document.createElement('button');
-      btn.textContent=opt;
-      btn.onclick = () => {
-        if(opt===q.answer){score++;}
-        feedbackEl.textContent = `Correct Answer: ${q.answer}`;
-        nextBtn.style.display='block';
-      };
-      optionsEl.appendChild(btn);
-    });
-  }
-
-  nextBtn.onclick = () => {
-    current++;
-    if(current<roundQuestions.length){loadQuestion();}
-    else{showFinal();}
-  };
-
-  function showFinal(){
-    quizPage.style.display='none';
-    finalPage.style.display='block';
-    const percent = Math.round((score/roundQuestions.length)*100);
-    finalScoreEl.textContent = `You scored ${percent}%`;
-    if(percent>=80){mascotEl.textContent='😄';}
-    else if(percent>=50){mascotEl.textContent='😐';}
-    else{mascotEl.textContent='😢';}
-  }
-
-  restartBtn.onclick = () => {
-    roundQuestions = drawRound(fullQuestionBank);
-    current=0; score=0;
-    finalPage.style.display='none';
-    introPage.style.display='block';
-  };
-</script>
-</body>
-</html>
+  // TECHNICAL / HARD (15)
+  {id:"q44", difficulty:"technical", question:"In Ritual’s consensus protocol Symphony, what does the “execute‑once” model refer to?", options:["Every node executes all transactions","One node executes heavy compute, others verify proofs","No execution at all","Execution only on demand"], answer:"One node executes heavy compute, others verify proofs"},
+  {id:"q45", difficulty:"technical", question:"What problem does proof‑system‑agnostic design solve in Ritual’s architecture?", options:["Limits compute types","Allows various compute and verification types (AI, ZK, TEE, etc.)","Removes verification","Forces centralization"], answer:"Allows various compute and verification types (AI, ZK, TEE, etc.)"},
+  {id:"q46", difficulty:"technical", question:"What role does the fee mechanism Resonance play in workload assignment on Ritual?", options:["It sets a fixed gas fee","It matches user transactions to specialized nodes based on cost/speed preference and node capability","It ignores compute type","It only does storage pricing"], answer:"It matches user transactions to specialized nodes based on cost/speed preference and node capability"},
+  {id:"q47", difficulty:"technical", question:"Why is replicated execution across all nodes inefficient for heterogeneous workloads according to Ritual docs?", options:["Because compute is trivial","Heavy compute repeated many times wastes resources and slows network","It’s secure","It’s cheap"], answer:"Heavy compute repeated many times wastes resources and slows network"},
+  {id:"q48", difficulty:"technical", question:"What does modular storage in Ritual allow for regarding data like AI model weights or large objects?", options:["Must store on‑chain","Use storage‑agnostic backends (Web2 or Web3), avoiding on‑chain storage bloat","No storage","Only small data"], answer:"Use storage‑agnostic backends (Web2 or Web3), avoiding on‑chain storage bloat"},
+  {id:"q49", difficulty:"technical", question:"How does Ritual maintain decentralization while allowing node specialization and heterogeneous compute?", options:["All nodes do everything anyway","Via proof‑based verification and distributed committees rather than full replication","By centralizing compute","No decentralization"], answer:"Via proof‑based verification and distributed committees rather than full replication"},
+  {id:"q50", difficulty:"technical", question:"Can other blockchains outsource heavy compute (like proof generation or AI inference) to Ritual’s infrastructure according to docs?", options:["Yes, Ritual acts as a backend for other chains","No, only internal use","Only storage outsourcing","Only simple compute"], answer:"Yes, Ritual acts as a backend for other chains"},
+  {id:"q51", difficulty:"technical", question:"Which of these is a benefit of using heterogeneous compute + fee‑market + proof verification rather than classic blockchain execution for heavy workloads?", options:["Lower decentralization","Higher resource waste","Faster execution, scalable workloads, optional compute types","Less security"], answer:"Faster execution, scalable workloads, optional compute types"},
+  {id:"q52", difficulty:"technical", question:"What does “expressive blockchain” mean in Ritual’s vision of blockchain architecture?", options:["Only token logic","A blockchain supporting arbitrary compute like AI, ZK, TEE, custom future compute","Only fixed smart‑contract logic","Only storage"], answer:"A blockchain supporting arbitrary compute like AI, ZK, TEE, custom future compute"},
+  {id:"q53", difficulty:"technical", question:"Which architectural components combine to give Ritual flexibility in compute, storage, and pricing?", options:["Classic EVM only","Node Specialization, Modular Storage, Resonance, Symphony, EVM++","Only storage backend","Only consensus"], answer:"Node Specialization, Modular Storage, Resonance, Symphony, EVM++"},
+  {id:"q54", difficulty:"technical", question:"What problem does Modular Storage solve in the context of AI models and large data on‑chain?", options:["Makes everything on‑chain","Allows external storage backends so blockchain doesn’t bloat","Deletes data","Copies data everywhere"], answer:"Allows external storage backends so blockchain doesn’t bloat"},
+  {id:"q55", difficulty:"technical", question:"According to Ritual docs, why is the traditional fee model inadequate for compute‑heavy workloads like AI or ZK on chain?", options:["It’s perfect","It treats all compute equally, cannot price heterogeneity, and makes heavy compute inefficient","It overcharges only small compute","It’s too complex"], answer:"It treats all compute equally, cannot price heterogeneity, and makes heavy compute inefficient"},
+  {id:"q56", difficulty:"technical", question:"How does Ritual’s design help support new types of compute in the future beyond current AI/ZK/TEE paradigms?", options:["Locks compute types","Supports proof‑system agnostic verification, storage‑agnostic storage, and generic compute scheduling","Only supports current compute","Only supports on‑chain logic"], answer:"Supports proof‑system agnostic verification, storage‑agnostic storage, and generic compute scheduling"},
+  {id:"q57", difficulty:"technical", question:"What is the advantage of using a matching market (Resonance) rather than fixed gas fees for specialized compute tasks?", options:["No advantage","Allows users to choose cost/priority, matches to capable nodes, efficient resource use","Only cheaper gas","Only faster gas"], answer:"Allows users to choose cost/priority, matches to capable nodes, efficient resource use"},
+  {id:"q58", difficulty:"technical", question:"Does Ritual support smart‑contract scheduling (automated future invocations) without external bots or keepers?", options:["Yes","No","Only once","Only manual"], answer:"Yes"},
+  {id:"q59", difficulty:"technical", question:"Can developers on Ritual expect to build applications that combine AI, ZK, and traditional smart‑contract logic seamlessly?", options:["Yes","No","Only AI","Only ZK"], answer:"Yes"},
+  {id:"q60", difficulty:"technical", question:"What br
