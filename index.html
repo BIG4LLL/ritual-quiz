@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ritual Quiz Challenge</title>
+<style>
+  body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; margin:0; display:flex; justify-content:center; align-items:center; min-height:100vh; }
+  .container { background:white; padding:30px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.1); width:100%; max-width:600px; text-align:center; position:relative; overflow:hidden; }
+  .fade-in { opacity:0; animation:fadeIn 2s forwards; }
+  @keyframes fadeIn { to {opacity:1;} }
+  .question { font-size:1.2em; margin-bottom:20px; }
+  .options button { display:block; margin:10px auto; padding:12px 25px; border:none; border-radius:8px; background:#4a90e2; color:white; font-size:1em; cursor:pointer; transition:0.2s; }
+  .options button:hover { background:#357ABD; }
+  .result { font-size:1.2em; margin-top:20px; }
+  .next-btn { display:none; margin-top:20px; padding:10px 20px; background:#28a745; color:white; border:none; border-radius:8px; cursor:pointer; font-size:1em; }
+  .mascot { font-size:4em; margin-top:20px; }
+  .intro { font-size:1.5em; margin-bottom:20px; }
+  .footer { margin-top:30px; font-size:0.9em; }
+  .footer a { color:#4a90e2; text-decoration:none; }
+  .footer a:hover { text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Intro Page -->
+  <div id="introPage" class="fade-in">
+    <div class="intro">How Ritual-aligned are you?<br>Let's find out!</div>
+    <button id="startBtn" class="next-btn" style="display:block;">Click to Begin Quiz</button>
+    <div class="footer">Built by <a href="https://x.com/THE_REAL_BIG4L?t=PYvu1HEe6mb-MVMpn7_3HQ&s=09" target="_blank">@THE_REAL_BIG4L</a></div>
+  </div>
+
+  <!-- Quiz Page -->
+  <div id="quizPage" style="display:none;">
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <div class="result" id="feedback"></div>
+    <button id="nextBtn" class="next-btn">Next Question</button>
+    <div class="footer">Built by <a href="https://x.com/THE_REAL_BIG4L?t=PYvu1HEe6mb-MVMpn7_3HQ&s=09" target="_blank">@THE_REAL_BIG4L</a></div>
+  </div>
+
+  <!-- Final Page -->
+  <div id="finalPage" style="display:none;">
+    <div class="result" id="finalScore"></div>
+    <div class="mascot" id="mascot"></div>
+    <button id="restartBtn" class="next-btn">Restart Quiz</button>
+    <div class="footer">Built by <a href="https://x.com/THE_REAL_BIG4L?t=PYvu1HEe6mb-MVMpn7_3HQ&s=09" target="_blank">@THE_REAL_BIG4L</a></div>
+  </div>
+</div>
+
+<script>
+  // ---------------- 50 QUESTION BANK ----------------
+  const fullQuestionBank = [
+    // EASY (15)
+    {id:"q1", difficulty:"easy", question:"What is the core mission of Ritual blockchain?", options:["Scalable payments","Enrich what users can do on-chain","Private messaging","Gaming"], answer:"Enrich what users can do on-chain"},
+    {id:"q2", difficulty:"easy", question:"Ritual was born at the intersection of which two fields?", options:["Gaming & VR","Crypto & AI","DeFi & NFTs","Storage & Networking"], answer:"Crypto & AI"},
+    {id:"q3", difficulty:"easy", question:"Which feature lets smart contracts schedule recurring calls?", options:["Guardians","Scheduled Transactions","Resonance","Node Specialization"], answer:"Scheduled Transactions"},
+    {id:"q4", difficulty:"easy", question:"What does Modular Storage allow?", options:["Only store on-chain","Use Web2 and Web3 backends","Encrypt all data","Force AWS usage"], answer:"Use Web2 and Web3 backends"},
+    {id:"q5", difficulty:"easy", question:"Which goal is NOT part of Ritual's architecture?", options:["Enable expressive on-chain compute","Support large data","Force all computation on-chain","Support heterogeneous workloads"], answer:"Force all computation on-chain"},
+    {id:"q6", difficulty:"easy", question:"Ritual is designed for which type of users?", options:["Only experts","Both new and experienced users","Only DeFi traders","Only AI developers"], answer:"Both new and experienced users"},
+    {id:"q7", difficulty:"easy", question:"Ritual combines blockchain with…?", options:["Cloud gaming","AI models","Social media","IoT"], answer:"AI models"},
+    {id:"q8", difficulty:"easy", question:"Ritual's smart contracts are optimized for…?", options:["Speed","Cost only","AI computation","Mining"], answer:"AI computation"},
+    {id:"q9", difficulty:"easy", question:"Which backend example does Modular Storage support?", options:["AWS only","HuggingFace Hub","Only local storage","Google Drive"], answer:"HuggingFace Hub"},
+    {id:"q10", difficulty:"easy", question:"Ritual supports what kind of compute?", options:["Only token transfers","Heterogeneous compute","Only storage","Only AI inference"], answer:"Heterogeneous compute"},
+    {id:"q11", difficulty:"easy", question:"Which feature provides data flexibility?", options:["Node Specialization","Modular Storage","Resonance","Symphony"], answer:"Modular Storage"},
+    {id:"q12", difficulty:"easy", question:"What is Ritual's main blockchain focus?", options:["Gaming","AI & compute","Social media","Payments"], answer:"AI & compute"},
+    {id:"q13", difficulty:"easy", question:"Ritual’s Modular Storage can store large objects like…?", options:["Images","AI models","Text only","NFT metadata"], answer:"AI models"},
+    {id:"q14", difficulty:"easy", question:"Which of these is a goal of Ritual?", options:["Force all computation on-chain","Support heterogeneous workloads","Limit AI tasks","Centralized storage"], answer:"Support heterogeneous workloads"},
+    {id:"q15", difficulty:"easy", question:"Ritual is designed to work with…?", options:["Only Web3","Web2 and Web3","Only local storage","Only AWS"], answer:"Web2 and Web3"},
+
+    // MID (20)
+    {id:"q16", difficulty:"mid", question:"What is EVM++?", options:["New token","Extensions to EVM for advanced features","A wallet","Consensus protocol"], answer:"Extensions to EVM for advanced features"},
+    {id:"q17", difficulty:"mid", question:"Which feature is NOT in EVM++?", options:["Native scheduling","Account abstraction","Heterogeneous compute precompiles","Automatic token burning"], answer:"Automatic token burning"},
+    {id:"q18", difficulty:"mid", question:"What is the fee mechanism matching transactions to nodes?", options:["GasFee","Resonance","EIP-1559","GasMarket"], answer:"Resonance"},
+    {id:"q19", difficulty:"mid", question:"Node Specialization solves?", options:["Uniform performance","Allow specialized nodes","Remove validators","Require heavy hardware"], answer:"Allow specialized nodes"},
+    {id:"q20", difficulty:"mid", question:"Which storage backends does Modular Storage support?", options:["Web3 only","Web2 only","Web2 via HuggingFace, Web3 via Arweave","Local only"], answer:"Web2 via HuggingFace, Web3 via Arweave"},
+    {id:"q21", difficulty:"mid", question:"Which consensus protocol for heterogeneous compute?", options:["PoW++","Symphony","BeaconChain","ShardingX"], answer:"Symphony"},
+    {id:"q22", difficulty:"mid", question:"Why is replicated execution inefficient for heterogeneous workloads?", options:["Too fast","All nodes re-execute expensive compute","Not deterministic","Memory usage"], answer:"All nodes re-execute expensive compute"},
+    {id:"q23", difficulty:"mid", question:"Can developers use familiar Ethereum tooling?", options:["Yes via EVM++","No","Only for storage","Only for wallets"], answer:"Yes via EVM++"},
+    {id:"q24", difficulty:"mid", question:"Why choose specialized node over generic?", options:["Support heavy compute","Generic banned","More tokens automatically","Faster token transfers"], answer:"Support heavy compute"},
+    {id:"q25", difficulty:"mid", question:"What does Scheduled Transactions feature allow?", options:["Recurring smart contract calls","Only single execution","AI inference","Node staking"], answer:"Recurring smart contract calls"},
+    {id:"q26", difficulty:"mid", question:"What is the purpose of Resonance?", options:["Match transactions to capable nodes","Store AI models","Mining only","Wallet management"], answer:"Match transactions to capable nodes"},
+    {id:"q27", difficulty:"mid", question:"Which feature provides flexible compute execution?", options:["Execution Sidecars","Symphony","Resonance","Node Specialization"], answer:"Execution Sidecars"},
+    {id:"q28", difficulty:"mid", question:"Which part of Ritual ensures transaction efficiency?", options:["Symphony","Modular Storage","Wallets","Nodes"], answer:"Symphony"},
+    {id:"q29", difficulty:"mid", question:"What does Modular Storage prevent?", options:["Forced on-chain storage","Compute execution","Mining","Wallet access"], answer:"Forced on-chain storage"},
+    {id:"q30", difficulty:"mid", question:"Ritual supports heterogeneous compute for?", options:["Token transfer only","AI, ZK, TEE, cross-chain state","Storage only","Queries only"], answer:"AI, ZK, TEE, cross-chain state"},
+    {id:"q31", difficulty:"mid", question:"Resonance allows user to specify what instead of gas?", options:["Flat fee","Valuation (max willingness to pay)","No fee","Percentage block reward"], answer:"Valuation (max willingness to pay)"},
+    {id:"q32", difficulty:"mid", question:"Which feature schedules smart contract calls without external keepers?", options:["Execution Sidecars","Native Scheduling in EVM++","Symphony","Resonance"], answer:"Native Scheduling in EVM++"},
+    {id:"q33", difficulty:"mid", question:"Why does Ritual support multiple proof systems?", options:["Supports multiple verification/TEE/ZK","One proof only","Ignores verification","Only TEE"], answer:"Supports multiple verification/TEE/ZK"},
+    {id:"q34", difficulty:"mid", question:"What does Modular Storage help with for AI models?", options:["Flexibility, large data","Faster mining","Only storage","Gas savings"], answer:"Flexibility, large data"},
+    {id:"q35", difficulty:"mid", question:"What is the role of Execution Sidecars?", options:["Implement heterogeneous compute precompiles","Store wallets","Token transfer only","Mining"], answer:"Implement heterogeneous compute precompiles"},
+
+    // TECHNICAL (15)
+    {id:"q36", difficulty:"technical", question:"Symphony execution principle?", options:["Replicate everywhere","Execute-once, verify-many","Delay transactions","Limit to opcodes"], answer:"Execute-once, verify-many"},
+    {id:"q37", difficulty:"technical", question:"Resonance nodes must provide?", options:["Fixed fee","Cost function for execution","Nothing","Only staking"], answer:"Cost function for execution"},
+    {id:"q38", difficulty:"technical", question:"Enshrined On-Chain AI ensures?", options:["Provenance, authenticity, IP primitives","Private server storage","Developer use only","Non-blockchain AI"], answer:"Provenance, authenticity, IP primitives"},
+    {id:"q39", difficulty:"technical", question:"Why Web2+Web3 storage?", options:["Developer flexibility, large AI data","Backward compatible","Web3 unreliable","Avoid blockchain"], answer:"Developer flexibility, large AI data"},
+    {id:"q40", difficulty:"technical", question:"What happens to user 'valuation' before transaction-node match?", options:["Public immediately","Encrypted until matching","Ignored","Burned"], answer:"Encrypted until matching"},
+    {id:"q41", difficulty:"technical", question:"Proof-system agnostic means?", options:["Only one proof system","Supports multiple verification systems","No proofs","Ignores verification"], answer:"Supports multiple verification systems"},
+    {id:"q42", difficulty:"technical", question:"Which compute workloads are supported beyond standard smart contract logic?", options:["AI, ZK, TEE, cross-chain","Token transfer only","Storage only","Price queries only"], answer:"AI, ZK, TEE, cross-chain"},
+    {id:"q43", difficulty:"technical", question:"Why specialized node improves cost/performance?", options:["Optimizes heavy compute tasks","Generic nodes banned","More tokens automatically","Faster token transfers"], answer:"Optimizes heavy compute tasks"},
+    {id:"q44", difficulty:"technical", question:"Which fee option lets users express max willingness to pay?", options:["Flat fee","Valuation","No fee","Percentage block reward"], answer:"Valuation"},
+    {id:"q45", difficulty:"technical", question:"Execution sidecars implement what?", options:["Heterogeneous precompiles","Wallets","Token transfer only","Mining"], answer:"Heterogeneous precompiles"},
+    {id:"q46", difficulty:"technical", question:"What ensures heterogeneous execution integrity?", options:["TEE, ZK, hybrid proofs","Only PoW","Nothing special","Central authority"], answer:"TEE, ZK, hybrid proofs"},
+    {id:"q47", difficulty:"technical", question:"What is the advantage of Modular Storage for AI models?", options:["Flexible storage backend","Faster mining","Cheap gas","Unlimited on-chain storage"], answer:"Flexible storage backend"},
+    {id:"q48", difficulty:"technical", question:"Which component allows scheduling without external keepers?", options:["Native scheduling in EVM++","Symphony","Resonance","Execution Sidecars"], answer:"Native scheduling in EVM++"},
+    {id:"q49", difficulty:"technical", question:"What is the function of Resonance in heterogeneous compute?", options:["Match nodes to tasks efficiently","Store AI models","Wallet only","Mining only"], answer:"Match nodes to tasks efficiently"},
+    {id:"q50", difficulty:"technical", question:"What is Node Specialization?", options:["Nodes specialized for workloads","All nodes generic","Mining only","Storage only"], answer:"Nodes specialized for workloads"}
+  ];
+
+  function shuffleArray(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+
+  // Draw round of 10 questions (3 technical, 4 mid, 3 easy)
+  function drawRound(bank){
+    const byDiff = {easy:[], mid:[], technical:[]};
+    bank.forEach(q=>{byDiff[q.difficulty].push(q);});
+    shuffleArray(byDiff.easy); shuffleArray(byDiff.mid); shuffleArray(byDiff.technical);
+    const sel = [];
+    sel.push(...byDiff.technical.slice(0,3)); // 3 technical
+    sel.push(...byDiff.mid.slice(0,4));       // 4 mid
+    sel.push(...byDiff.easy.slice(0,3));      // 3 easy
+    shuffleArray(sel);
+    return sel;
+  }
+
+  let roundQuestions = drawRound(fullQuestionBank);
+  let current = 0; let score = 0;
+
+  const introPage = document.getElementById('introPage');
+  const startBtn = document.getElementById('startBtn');
+  const quizPage = document.getElementById('quizPage');
+  const questionEl = document.getElementById('question');
+  const optionsEl = document.getElementById('options');
+  const feedbackEl = document.getElementById('feedback');
+  const nextBtn = document.getElementById('nextBtn');
+  const finalPage = document.getElementById('finalPage');
+  const finalScoreEl = document.getElementById('finalScore');
+  const mascotEl = document.getElementById('mascot');
+  const restartBtn = document.getElementById('restartBtn');
+
+  startBtn.onclick = () => { introPage.style.display='none'; quizPage.style.display='block'; loadQuestion(); };
+
+  function loadQuestion(){
+    const q = roundQuestions[current];
+    questionEl.textContent = q.question;
+    optionsEl.innerHTML='';
+    feedbackEl.textContent='';
+    nextBtn.style.display='none';
+    shuffleArray(q.options);
+    q.options.forEach(opt=>{
+      const btn=document.createElement('button');
+      btn.textContent=opt;
+      btn.onclick = () => {
+        if(opt===q.answer){score++;}
+        feedbackEl.textContent = `Correct Answer: ${q.answer}`;
+        nextBtn.style.display='block';
+      };
+      optionsEl.appendChild(btn);
+    });
+  }
+
+  nextBtn.onclick = () => {
+    current++;
+    if(current<roundQuestions.length){loadQuestion();}
+    else{showFinal();}
+  };
+
+  function showFinal(){
+    quizPage.style.display='none';
+    finalPage.style.display='block';
+    const percent = Math.round((score/roundQuestions.length)*100);
+    finalScoreEl.textContent = `You scored ${percent}%`;
+    if(percent>=80){mascotEl.textContent='😄';}
+    else if(percent>=50){mascotEl.textContent='😐';}
+    else{mascotEl.textContent='😢';}
+  }
+
+  restartBtn.onclick = () => {
+    roundQuestions = drawRound(fullQuestionBank);
+    current=0; score=0;
+    finalPage.style.display='none';
+    introPage.style.display='block';
+  };
+</script>
+</body>
+</html>
